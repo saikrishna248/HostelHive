@@ -4,6 +4,7 @@ export default function Toast({ message, type }) {
       className={`
         fixed top-4 left-1/2 transform -translate-x-1/2 
         px-4 py-2 rounded shadow-lg text-white 
+        z-[9999]
         ${type === "success" ? "bg-green-600" : "bg-red-600"}
       `}
     >

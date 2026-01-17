@@ -1,19 +1,36 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import Toast from './Toast';
+import { useState } from "react";
 
 function Navbar() {
   const { pathname } = useLocation("");
   const navigate = useNavigate();
 
-  const isLoggedIn = !!localStorage.getItem("authToken"); // or your auth check
+
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+
+  const showToast = (message, type) => {
+    setToast({ show: true, message, type });
+
+    setTimeout(() => {
+      setToast({ show: false, message: "", type: "" });
+    }, 2000);
+  };
+
+
+  const isLoggedIn = !!localStorage.getItem("token"); // or your auth check
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    alert("Successfully logged out");
+     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+   // alert("Successfully logged out");
+     showToast("Successfully logged out", "success");
     navigate("/");
   };
 
   return (
     <>
+     {toast.show && <Toast message={toast.message} type={toast.type} />}
       <nav className="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-10">
         <div className="space-x-6">
           {!isLoggedIn && (
@@ -37,6 +54,16 @@ function Navbar() {
                 }`}
               >
                 Register
+              </Link>
+               <Link
+                to="/Dashboard/Ecommerce"
+                className={`transition-colors duration-200 font-medium ${
+                  pathname === "./Dashboard/Ecommerce"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-600 hover:text-blue-600"
+                }`}
+              >
+                Ecommerce
               </Link>
             </>
           )}

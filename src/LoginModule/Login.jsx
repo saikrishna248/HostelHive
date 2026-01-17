@@ -2,14 +2,24 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Toast from './Toast';
 
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  
+
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+
+  const showToast = (message, type) => {
+    setToast({ show: true, message, type });
+
+    setTimeout(() => {
+      setToast({ show: false, message: "", type: "" });
+    }, 2000);
+  };
+
   const HandleLogin = async (e) => {
     //  debugger;
     e.preventDefault();
@@ -21,17 +31,21 @@ function Login() {
           password: password,
         }
       );
-       alert(response.data);
-    //localStorage.setItem("authToken", response.data.accessToken);
-        localStorage.setItem("authToken", "ThisIsMySuperSecretKey12345");
-
+      // alert(response.data);
+      // debugger;
+      showToast(response.data.message, "success");
+      //localStorage.setItem("authToken", response.data.accessToken);
+     // localStorage.setItem("authToken", "ThisIsMySuperSecretKey12345");
+       localStorage.setItem("token", response.data.token);
+       // Save user info (optional)
+    localStorage.setItem("user", JSON.stringify(response.data.user));
       setTimeout(() => navigate("/Dashboard"), 1500);
 
     } catch (error) {
       if (error.response) {
-        alert(error.response.data); // show backend error message
+        showToast(error.response.data, "error"); // show backend error message
       }
-     
+
     }
   };
 
@@ -44,6 +58,8 @@ function Login() {
           </h2>
 
           <form onSubmit={HandleLogin}>
+            {toast.show && <Toast message={toast.message} type={toast.type} />}
+
             <div className="mb-4">
               <label className="block text-gray-600 mb-1">Email</label>
               <input
