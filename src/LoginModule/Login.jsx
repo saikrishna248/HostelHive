@@ -4,6 +4,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Toast from './Toast';
 
+//Redux 1
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../Redux/authSlice";
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -19,6 +23,9 @@ function Login() {
       setToast({ show: false, message: "", type: "" });
     }, 2000);
   };
+  //Redux 2
+  const dispatch = useDispatch();
+
 
   const HandleLogin = async (e) => {
     //  debugger;
@@ -34,11 +41,12 @@ function Login() {
       // alert(response.data);
       // debugger;
       showToast(response.data.message, "success");
-      //localStorage.setItem("authToken", response.data.accessToken);
-     // localStorage.setItem("authToken", "ThisIsMySuperSecretKey12345");
+
+      //Before Redux local storage is uesd to Store token and user info in localStorage
        localStorage.setItem("token", response.data.token);
-       // Save user info (optional)
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+       localStorage.setItem("user", JSON.stringify(response.data.user));
+      //Redux 3
+      dispatch(loginSuccess({ token: response.data.token, user: response.data.user }));
       setTimeout(() => navigate("/Dashboard"), 1500);
 
     } catch (error) {

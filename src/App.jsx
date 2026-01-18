@@ -5,6 +5,7 @@ import Login from "./LoginModule/Login";
 import Register from "./LoginModule/Register";
 import Dashboard from "./LoginModule/Dashboard";
 import Ecommerce from "./Dashboard/Ecommerce";
+import GettingData from "./Dashboard/GettingData";
 
 import ProtectedRoute from "./api/ProtectedRoute";
 // import "./App.css";
@@ -26,7 +27,7 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/Dashboard/Ecommerce" element={<Ecommerce />} />
+        <Route path="/Dashboard/GettingData" element={<GettingData />} />
       </Routes>
 
     </>

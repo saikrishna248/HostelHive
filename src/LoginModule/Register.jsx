@@ -13,7 +13,7 @@ function Register() {
   const navigate = useNavigate();
 
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
-
+  const [error, setError] = useState('');   // optional - error message కోసం
   const showToast = (message, type) => {
     setToast({ show: true, message, type });
 
@@ -21,7 +21,20 @@ function Register() {
       setToast({ show: false, message: "", type: "" });
     }, 2000);
   };
+const handleNameChange = (e) => {
+    const value = e.target.value;
+    
+    // Regular Expression: Only letters (a-z, A-Z) and space allowed
+    const regex = /^[a-zA-Z\s]*$/;
 
+    if (regex.test(value)) {
+      setFullName(value);
+      setError('');                    // valid అయితే error clear
+    } 
+    // else → do nothing (invalid characters ni ignore cheseyali)
+    // లేదా error message చూపించొచ్చు:
+    // else setError('Only letters and spaces are allowed');
+  };
   const HandleRegister = async (e) => {
  //   debugger;
     e.preventDefault();
@@ -63,9 +76,10 @@ function Register() {
               <input
                 type="text"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={handleNameChange}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your full name"
+                required
               />
             </div>
 
@@ -77,6 +91,7 @@ function Register() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your email"
+                required
               />
             </div>
 
@@ -89,6 +104,7 @@ function Register() {
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Create a password"
                 autoComplete="new-password"
+                required
               />
             </div>
 
@@ -101,6 +117,7 @@ function Register() {
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Re-enter your password"
                 autoComplete="new-password"
+                required
               />
             </div>
 
