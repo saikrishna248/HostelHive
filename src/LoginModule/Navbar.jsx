@@ -6,6 +6,7 @@ import GettingData from "../Dashboard/GettingData";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../Redux/authSlice";
+import HighChart from "../Dashboard/HighChart";
 
 
 function Navbar() {
@@ -73,6 +74,7 @@ function Navbar() {
             </>
           )}
           {isAuthenticated && (
+            <>
             <Link
               to="/Dashboard"
               className={`transition-colors duration-200 font-medium ${pathname === "/Dashboard"
@@ -82,6 +84,17 @@ function Navbar() {
             >
               Dashboard
             </Link>
+             <Link
+              to="/Dashboard/HighChart"
+              className={`transition-colors duration-200 font-medium ${pathname === "/Dashboard/HighChart"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-600 hover:text-blue-600"
+                }`}
+            >
+              HighCharts
+            </Link>
+            
+            </>
           )}
         </div>
         {isAuthenticated && (
@@ -92,6 +105,7 @@ function Navbar() {
             Logout
           </button>
         )}
+
       </nav>
     </>
   );
