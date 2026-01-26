@@ -5,6 +5,8 @@ import Register from "./LoginModule/Register";
 import Dashboard from "./LoginModule/Dashboard";
 import Ecommerce from "./Dashboard/Ecommerce";
 import GettingData from "./Dashboard/GettingData";
+import ExcelUpload from "./Dashboard/ExcelUpload";
+
 
 import ProtectedRoute from "./api/ProtectedRoute";
 import HighChart from "./Dashboard/HighChart";
@@ -19,23 +21,27 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/Register" element={<Register />} />
 
-        <Route
-          path="/Dashboard"
+        <Route path="/Dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/Dashboard/HighChart"
+        <Route path="/Dashboard/HighChart"
           element={
             <ProtectedRoute>
               <HighChart />
             </ProtectedRoute>
           }
         />
-
+        <Route path="/Dashboard/ExcelUpload"
+          element={
+            <ProtectedRoute>
+              <ExcelUpload />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/Dashboard/GettingData" element={<GettingData />} />
       </Routes>
     </>

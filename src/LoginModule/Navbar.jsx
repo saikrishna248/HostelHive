@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import Toast from './Toast';
 import { useState } from "react";
 import GettingData from "../Dashboard/GettingData"; 
+import ExcelUpload from "../Dashboard/ExcelUpload";
+
 
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../Redux/authSlice";
@@ -93,7 +95,15 @@ function Navbar() {
             >
               HighCharts
             </Link>
-            
+            <Link
+              to="/Dashboard/ExcelUpload"
+              className={`transition-colors duration-200 font-medium ${pathname === "/Dashboard/ExcelUpload"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-600 hover:text-blue-600"
+                }`}
+            >
+              Excel Upload
+            </Link>
             </>
           )}
         </div>
