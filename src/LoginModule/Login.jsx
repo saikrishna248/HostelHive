@@ -2,12 +2,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Toast from './Toast';
-
+import Toast from "./Toast";
+import { GoogleLogin } from "@react-oauth/google";
 //Redux 1
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../Redux/authSlice";
-
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -26,7 +25,6 @@ function Login() {
   //Redux 2
   const dispatch = useDispatch();
 
-
   const HandleLogin = async (e) => {
     //  debugger;
     e.preventDefault();
@@ -36,24 +34,49 @@ function Login() {
         {
           email: email,
           password: password,
-        }
+        },
       );
       // alert(response.data);
       // debugger;
       showToast(response.data.message, "success");
 
       //Before Redux local storage is uesd to Store token and user info in localStorage
-       localStorage.setItem("token", response.data.token);
-       localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       //Redux 3
-      dispatch(loginSuccess({ token: response.data.token, user: response.data.user }));
+      dispatch(
+        loginSuccess({ token: response.data.token, user: response.data.user }),
+      );
       setTimeout(() => navigate("/Dashboard"), 1500);
-
     } catch (error) {
       if (error.response) {
         showToast(error.response.data, "error"); // show backend error message
       }
+    }
+  };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      debugger;
+      const idToken = credentialResponse.credential;
+
+      const response = await axios.post(
+        "https://localhost:44393/api/Auth/google-login",
+        { token: idToken },
+      );
+
+      showToast("Google login successful", "success");
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      dispatch(
+        loginSuccess({ token: response.data.token, user: response.data.user }),
+      );
+
+      setTimeout(() => navigate("/Dashboard"), 1500);
+    } catch (error) {
+      showToast("Google login failed", "error");
     }
   };
 
@@ -98,6 +121,17 @@ function Login() {
             >
               Login
             </button>
+            <div className="mt-4 text-center">
+              <p className="text-gray-500 mb-2">OR</p>
+            </div>
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => {
+                  showToast("Google Login Failed", "error");
+                }}
+              />
+            </div>
           </form>
 
           <p className="text-center text-sm text-gray-600 mt-4">
